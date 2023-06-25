@@ -38,6 +38,16 @@ class _HomeState extends State<Home> {
               onPressed: () => provider.reloadPictures(),
               icon: const Icon(Icons.refresh),
             ),
+            IconButton(
+              onPressed: () =>
+                  Navigator.of(context).pushNamed(AppRoutes.settingsPage),
+              icon: const Icon(Icons.settings),
+            ),
+            IconButton(
+              onPressed: () =>
+                  Navigator.of(context).pushNamed(AppRoutes.aboutPage),
+              icon: const Icon(Icons.help),
+            ),
           ],
         ),
         body: GridView.builder(
