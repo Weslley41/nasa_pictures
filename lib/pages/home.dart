@@ -20,7 +20,39 @@ class _HomeState extends State<Home> {
 
     print('>>> initState()');
     final provider = Provider.of<PictureProvider>(context, listen: false);
-    provider.loadPictures();
+    _loadPictures(provider);
+  }
+
+  void _loadPictures(provider) async {
+    print('>>> _loadPictures()');
+    await provider.loadPictures();
+    if (provider.statusCode != 200) {
+      print('>>> _loadPictures() - Error');
+      showErrorMessage(
+          'An error occurred while loading the images. Please try again later.');
+    } else {
+      print('>>> _loadPictures() - Success');
+    }
+  }
+
+  void _reloadPictures(provider) async {
+    print('>>> _reloadPictures()');
+    await provider.reloadPictures();
+    if (provider.statusCode != 200) {
+      print('>>> _reloadPictures() - Error');
+      showErrorMessage(
+          'An error occurred while reloading the images. Please try again later.');
+    } else {
+      print('>>> _reloadPictures() - Success');
+    }
+  }
+
+  void showErrorMessage(String message) {
+    print('>>> showSnackbar()');
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+      content: Text(message),
+      duration: const Duration(seconds: 3),
+    ));
   }
 
   @override
@@ -35,7 +67,7 @@ class _HomeState extends State<Home> {
           title: const Text('NASA Pictures'),
           actions: [
             IconButton(
-              onPressed: () => provider.reloadPictures(),
+              onPressed: () => _reloadPictures(provider),
               icon: const Icon(Icons.refresh),
             ),
             IconButton(

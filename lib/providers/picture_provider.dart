@@ -10,6 +10,7 @@ class PictureProvider with ChangeNotifier {
   final String apiKey = dotenv.env['API_KEY']!;
   final String baseUrl = 'https://api.nasa.gov/planetary/apod';
   final List<APODPicture> _pictures = [];
+  late int statusCode;
   int _countPictures = 10;
   int _invalidPictures = 0;
 
@@ -19,22 +20,27 @@ class PictureProvider with ChangeNotifier {
   Future<void> loadPictures() async {
     final int count = _invalidPictures == 0 ? _countPictures : _invalidPictures;
     print('>>> loadPictures($count)');
-    _invalidPictures = 0;
     final String url = '$baseUrl?api_key=$apiKey&count=$count';
-    final request = await http.get(Uri.parse(url));
-    if (request.body.isNotEmpty) {
+    final request = await http.get(Uri.parse(url)).timeout(
+      const Duration(seconds: 10),
+      onTimeout: () {
+        print('>>> loadPictures() - Timeout');
+        return http.Response('Error timeout', 408);
+      }
+    );
+    statusCode = request.statusCode;
+
+    if (request.statusCode == 200) {
+      _invalidPictures = 0;
       final data = jsonDecode(request.body);
       data.forEach((picture) => loadValidPicture(picture));
+
       if (_invalidPictures > 0) {
-        loadPictures();
+        await loadPictures();
       } else {
-        print('>>> NOTIFY');
+        print('>>> notifyListeners()');
         notifyListeners();
       }
-    } else {
-      //ADICIONAR UMA EXIBICIÇÃO PARA O USUÁRIO RECERREGAR DEVIDO A FALHA
-      //NA COMUNICAÇÃO COM O SERVIDOR
-      loadPictures();
     }
   }
 
@@ -58,10 +64,10 @@ class PictureProvider with ChangeNotifier {
     }
   }
 
-  void reloadPictures() {
+  Future<void> reloadPictures() {
     print('>>> reloadPictures()');
     _pictures.clear();
-    loadPictures();
+    return loadPictures();
   }
 
   void updateCountImages(int count) {
