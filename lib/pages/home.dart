@@ -20,7 +20,43 @@ class _HomeState extends State<Home> {
 
     print('>>> initState()');
     final provider = Provider.of<PictureProvider>(context, listen: false);
-    provider.loadPictures();
+    _loadPictures(provider);
+  }
+
+  void _loadPictures(provider) async {
+    print('>>> _loadPictures()');
+    await provider.loadPictures();
+    if (provider.statusCode != 200) {
+      print('>>> _loadPictures() - Error');
+      showErrorMessage(
+        'An error occurred while loading the images. Please try again later.'
+      );
+    } else {
+      print('>>> _loadPictures() - Success');
+    }
+  }
+
+  void _reloadPictures(provider) async {
+    print('>>> _reloadPictures()');
+    await provider.reloadPictures();
+    if (provider.statusCode != 200) {
+      print('>>> _reloadPictures() - Error');
+      showErrorMessage(
+        'An error occurred while reloading the images. Please try again later.'
+      );
+    } else {
+      print('>>> _reloadPictures() - Success');
+    }
+  }
+
+  void showErrorMessage(String message) {
+    print('>>> showSnackbar()');
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(message),
+        duration: const Duration(seconds: 3),
+      )
+    );
   }
 
   @override
@@ -31,37 +67,39 @@ class _HomeState extends State<Home> {
     print('>>> count pictures: ${pictures.length}');
 
     return Scaffold(
-        appBar: AppBar(
-          title: const Text('NASA Pictures'),
-          actions: [
-            IconButton(
-              onPressed: () => provider.reloadPictures(),
-              icon: const Icon(Icons.refresh),
-            ),
-          ],
-        ),
-        body: GridView.builder(
-          padding: const EdgeInsetsDirectional.all(20),
-          gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
-            maxCrossAxisExtent: 200,
-            childAspectRatio: 1,
-            crossAxisSpacing: 20,
-            mainAxisSpacing: 20,
+      appBar: AppBar(
+        title: const Text('NASA Pictures'),
+        actions: [
+          IconButton(
+            onPressed: () => _reloadPictures(provider),
+            icon: const Icon(Icons.refresh),
           ),
-          itemCount: pictures.length,
-          itemBuilder: (context, index) {
-            final picture = pictures[index];
+        ],
+      ),
+      body: GridView.builder(
+        padding: const EdgeInsetsDirectional.all(20),
+        gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
+          maxCrossAxisExtent: 200,
+          childAspectRatio: 1,
+          crossAxisSpacing: 20,
+          mainAxisSpacing: 20,
+        ),
+        itemCount: pictures.length,
+        itemBuilder: (context, index) {
+          final picture = pictures[index];
 
-            return GestureDetector(
-              onTap: () => Navigator.of(context)
-                  .pushNamed(AppRoutes.imageDetails, arguments: picture),
-              child: ImageCard(
-                imageTitle: picture.title,
-                imageDate: picture.date,
-                imageUrl: picture.imageUrl,
-              ),
-            );
-          },
-        ));
+          return GestureDetector(
+            onTap: () => Navigator.of(context).pushNamed(
+              AppRoutes.imageDetails, arguments: picture
+            ),
+            child: ImageCard(
+              imageTitle: picture.title,
+              imageDate: picture.date,
+              imageUrl: picture.imageUrl,
+            ),
+          );
+        },
+      )
+    );
   }
 }
