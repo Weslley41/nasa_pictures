@@ -14,7 +14,7 @@ class PictureProvider with ChangeNotifier {
   int _invalidPictures = 0;
 
   List<APODPicture> get pictures => _pictures;
-  APODPicture getPicture(int index) =>  _pictures[index];
+  APODPicture getPicture(int index) => _pictures[index];
 
   Future<void> loadPictures() async {
     final int count = _invalidPictures == 0 ? _countPictures : _invalidPictures;
@@ -22,13 +22,19 @@ class PictureProvider with ChangeNotifier {
     _invalidPictures = 0;
     final String url = '$baseUrl?api_key=$apiKey&count=$count';
     final request = await http.get(Uri.parse(url));
-    final data = jsonDecode(request.body);
-
-    data.forEach((picture) => loadValidPicture(picture));
-    if (_invalidPictures > 0) {
-      loadPictures();
+    if (request.body.isNotEmpty) {
+      final data = jsonDecode(request.body);
+      data.forEach((picture) => loadValidPicture(picture));
+      if (_invalidPictures > 0) {
+        loadPictures();
+      } else {
+        print('>>> NOTIFY');
+        notifyListeners();
+      }
     } else {
-      notifyListeners();
+      //ADICIONAR UMA EXIBICIÇÃO PARA O USUÁRIO RECERREGAR DEVIDO A FALHA
+      //NA COMUNICAÇÃO COM O SERVIDOR
+      loadPictures();
     }
   }
 
@@ -37,12 +43,12 @@ class PictureProvider with ChangeNotifier {
     APODPicture apodPicture;
     try {
       apodPicture = APODPicture(
-        title:        picture['title']        ?? 'No title',
-        copyright:    picture['copyright']    ?? 'No copyright',
-        explanation:  picture['explanation']  ?? 'No explanation',
-        date:         picture['date']         ?? 'No date',
-        imageUrl:     picture['url']!,
-        imageHDUrl:   picture['hdurl']        ?? picture['url']!,
+        title: picture['title'] ?? 'No title',
+        copyright: picture['copyright'] ?? 'No copyright',
+        explanation: picture['explanation'] ?? 'No explanation',
+        date: picture['date'] ?? 'No date',
+        imageUrl: picture['url']!,
+        imageHDUrl: picture['hdurl'] ?? picture['url']!,
       );
 
       _pictures.add(apodPicture);

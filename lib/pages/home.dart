@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:nasa_pictures/app/widgets/image_card.dart';
 import 'package:provider/provider.dart';
 
 import '../models/apod_picture.dart';
@@ -29,27 +30,33 @@ class _HomeState extends State<Home> {
     print('>>> count pictures: ${pictures.length}');
 
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('NASA Pictures'),
-        actions: [
-          IconButton(
-            onPressed: () => provider.reloadPictures(),
-            icon: const Icon(Icons.refresh),
+        appBar: AppBar(
+          title: const Text('NASA Pictures'),
+          actions: [
+            IconButton(
+              onPressed: () => provider.reloadPictures(),
+              icon: const Icon(Icons.refresh),
+            ),
+          ],
+        ),
+        body: GridView.builder(
+          padding: const EdgeInsetsDirectional.all(20),
+          gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
+            maxCrossAxisExtent: 200,
+            childAspectRatio: 1,
+            crossAxisSpacing: 20,
+            mainAxisSpacing: 20,
           ),
-        ],
-      ),
-      body: ListView.builder(
-        itemCount: pictures.length,
-        itemBuilder: (context, index) {
-          final picture = pictures[index];
+          itemCount: pictures.length,
+          itemBuilder: (context, index) {
+            final picture = pictures[index];
 
-          return ListTile(
-            title: Text(picture.title),
-            subtitle: Text(picture.date),
-            leading: Image.network(picture.imageUrl),
-          );
-        },
-      )
-    );
+            return ImageCard(
+              imageTitle: picture.title,
+              imageDate: picture.date,
+              imageUrl: picture.imageUrl,
+            );
+          },
+        ));
   }
 }
