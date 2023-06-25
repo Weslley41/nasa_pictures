@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:nasa_pictures/app/widgets/image_card.dart';
+import 'package:nasa_pictures/app/app_routes.dart';
+import 'package:nasa_pictures/widgets/image_card.dart';
 import 'package:provider/provider.dart';
 
 import '../models/apod_picture.dart';
@@ -51,10 +52,14 @@ class _HomeState extends State<Home> {
           itemBuilder: (context, index) {
             final picture = pictures[index];
 
-            return ImageCard(
-              imageTitle: picture.title,
-              imageDate: picture.date,
-              imageUrl: picture.imageUrl,
+            return GestureDetector(
+              onTap: () => Navigator.of(context)
+                  .pushNamed(AppRoutes.imageDetails, arguments: picture),
+              child: ImageCard(
+                imageTitle: picture.title,
+                imageDate: picture.date,
+                imageUrl: picture.imageUrl,
+              ),
             );
           },
         ));
