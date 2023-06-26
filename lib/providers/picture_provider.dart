@@ -9,6 +9,7 @@ import '../models/apod_picture.dart';
 class PictureProvider with ChangeNotifier {
   final String apiKey = dotenv.env['API_KEY']!;
   final String baseUrl = 'https://api.nasa.gov/planetary/apod';
+  late final Function onerror;
   final List<APODPicture> _pictures = [];
   late int statusCode;
   int _countPictures = 10;
@@ -19,6 +20,7 @@ class PictureProvider with ChangeNotifier {
 
   Future<void> loadPictures() async {
     final int count = _invalidPictures == 0 ? _countPictures : _invalidPictures;
+    _invalidPictures = 0;
     print('>>> loadPictures($count)');
     final String url = '$baseUrl?api_key=$apiKey&count=$count';
     final request = await http.get(Uri.parse(url)).timeout(
@@ -31,7 +33,6 @@ class PictureProvider with ChangeNotifier {
     statusCode = request.statusCode;
 
     if (request.statusCode == 200) {
-      _invalidPictures = 0;
       final data = jsonDecode(request.body);
       data.forEach((picture) => loadValidPicture(picture));
 
@@ -41,6 +42,9 @@ class PictureProvider with ChangeNotifier {
         print('>>> notifyListeners()');
         notifyListeners();
       }
+    } else {
+      _pictures.clear();
+      onerror('An error occurred while loading the images. Please try again later.');
     }
   }
 

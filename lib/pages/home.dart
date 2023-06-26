@@ -14,47 +14,26 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
+  final _refreshIndicatorKey = GlobalKey<RefreshIndicatorState>();
+
   @override
   void initState() {
     super.initState();
 
     print('>>> initState()');
     final provider = Provider.of<PictureProvider>(context, listen: false);
-    _loadPictures(provider);
-  }
-
-  void _loadPictures(provider) async {
-    print('>>> _loadPictures()');
-    await provider.loadPictures();
-    if (provider.statusCode != 200) {
-      print('>>> _loadPictures() - Error');
-      showErrorMessage(
-        'An error occurred while loading the images. Please try again later.'
-      );
-    } else {
-      print('>>> _loadPictures() - Success');
-    }
-  }
-
-  void _reloadPictures(provider) async {
-    print('>>> _reloadPictures()');
-    await provider.reloadPictures();
-    if (provider.statusCode != 200) {
-      print('>>> _reloadPictures() - Error');
-      showErrorMessage(
-        'An error occurred while reloading the images. Please try again later.'
-      );
-    } else {
-      print('>>> _reloadPictures() - Success');
-    }
+    provider.onerror = showErrorMessage;
+    provider.loadPictures();
   }
 
   void showErrorMessage(String message) {
     print('>>> showSnackbar()');
     ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text(message),
-        duration: const Duration(seconds: 3),
+      const SnackBar(
+        content: Text(
+          'An error occurred while loading the images. Please try again later.'
+        ),
+        duration: Duration(seconds: 3),
       )
     );
   }
@@ -71,34 +50,38 @@ class _HomeState extends State<Home> {
         title: const Text('NASA Pictures'),
         actions: [
           IconButton(
-            onPressed: () => _reloadPictures(provider),
+            onPressed: () => _refreshIndicatorKey.currentState?.show(),
             icon: const Icon(Icons.refresh),
           ),
         ],
       ),
-      body: GridView.builder(
-        padding: const EdgeInsetsDirectional.all(20),
-        gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
-          maxCrossAxisExtent: 200,
-          childAspectRatio: 1,
-          crossAxisSpacing: 20,
-          mainAxisSpacing: 20,
-        ),
-        itemCount: pictures.length,
-        itemBuilder: (context, index) {
-          final picture = pictures[index];
+      body: RefreshIndicator(
+        key: _refreshIndicatorKey,
+        onRefresh: () => provider.reloadPictures(),
+        child: GridView.builder(
+          padding: const EdgeInsetsDirectional.all(20),
+          gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
+            maxCrossAxisExtent: 200,
+            childAspectRatio: 1,
+            crossAxisSpacing: 20,
+            mainAxisSpacing: 20,
+          ),
+          itemCount: pictures.length,
+          itemBuilder: (context, index) {
+            final picture = pictures[index];
 
-          return GestureDetector(
-            onTap: () => Navigator.of(context).pushNamed(
-              AppRoutes.imageDetails, arguments: picture
-            ),
-            child: ImageCard(
-              imageTitle: picture.title,
-              imageDate: picture.date,
-              imageUrl: picture.imageUrl,
-            ),
-          );
-        },
+            return GestureDetector(
+              onTap: () => Navigator.of(context).pushNamed(
+                AppRoutes.imageDetails, arguments: picture
+              ),
+              child: ImageCard(
+                imageTitle: picture.title,
+                imageDate: picture.date,
+                imageUrl: picture.imageUrl,
+              ),
+            );
+          },
+        ),
       )
     );
   }
