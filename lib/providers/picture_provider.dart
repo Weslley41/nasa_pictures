@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
@@ -32,7 +33,7 @@ class PictureProvider with ChangeNotifier {
     );
     statusCode = request.statusCode;
 
-    if (request.statusCode == 200) {
+    if (request.statusCode == HttpStatus.ok) {
       final data = jsonDecode(request.body);
       data.forEach((picture) => loadValidPicture(picture));
 
