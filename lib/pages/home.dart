@@ -46,29 +46,39 @@ class _HomeState extends State<Home> {
     print('>>> count pictures: ${pictures.length}');
 
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('NASA Pictures'),
-        actions: [
-          IconButton(
-            onPressed: () => _refreshIndicatorKey.currentState?.show(),
-            icon: const Icon(Icons.refresh),
-          ),
-        ],
-      ),
-      body: RefreshIndicator(
+        appBar: AppBar(
+          title: const Text('NASA Pictures'),
+          actions: [
+            IconButton(
+              onPressed: () => _refreshIndicatorKey.currentState?.show(),
+              icon: const Icon(Icons.refresh),
+            ),
+            IconButton(
+              onPressed: () =>
+                  Navigator.of(context).pushNamed(AppRoutes.settingsPage),
+              icon: const Icon(Icons.settings),
+            ),
+            IconButton(
+              onPressed: () =>
+                  Navigator.of(context).pushNamed(AppRoutes.aboutPage),
+              icon: const Icon(Icons.help),
+            ),
+          ],
+        ),
+        body: RefreshIndicator(
         key: _refreshIndicatorKey,
         onRefresh: () => provider.reloadPictures(),
         child: GridView.builder(
-          padding: const EdgeInsetsDirectional.all(20),
-          gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
-            maxCrossAxisExtent: 200,
-            childAspectRatio: 1,
-            crossAxisSpacing: 20,
-            mainAxisSpacing: 20,
-          ),
-          itemCount: pictures.length,
-          itemBuilder: (context, index) {
-            final picture = pictures[index];
+            padding: const EdgeInsetsDirectional.all(20),
+            gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
+              maxCrossAxisExtent: 200,
+              childAspectRatio: 1,
+              crossAxisSpacing: 20,
+              mainAxisSpacing: 20,
+            ),
+            itemCount: pictures.length,
+            itemBuilder: (context, index) {
+              final picture = pictures[index];
 
             return GestureDetector(
               onTap: () => Navigator.of(context).pushNamed(

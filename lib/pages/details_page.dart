@@ -13,23 +13,54 @@ class DetailsPage extends StatelessWidget {
           title: const Text('Detalhes'),
         ),
         body: SingleChildScrollView(
+          padding: const EdgeInsetsDirectional.symmetric(vertical: 20),
           child: Column(
             children: [
-              Image.network(
-                image.imageUrl,
+              GestureDetector(
+                onTap: () => {},
+                child: Image.network(
+                  image.imageUrl,
+                  width: double.infinity,
+                ),
               ),
-              Text(
-                image.title,
-              ),
-              Text(
-                image.date,
-              ),
-              Text(
-                image.explanation,
-              ),
-              Text(
-                image.copyright,
-              ),
+              Padding(
+                padding: const EdgeInsetsDirectional.all(10),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  mainAxisSize: MainAxisSize.max,
+                  children: [
+                    Text(
+                      'Title: ${image.title}',
+                      style: TextStyle(
+                        fontSize: 30,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    Text(
+                      'Date: ${image.date}',
+                      style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    Text(
+                      'Description: ${image.explanation}',
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.w400,
+                      ),
+                    ),
+                    Text(
+                      'Copyright: ${image.copyright.trim().replaceAll('\n', ' ')}',
+                      style: TextStyle(
+                        fontSize: 15,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ],
+                ),
+              )
             ],
           ),
         ));
