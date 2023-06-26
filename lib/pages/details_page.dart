@@ -8,61 +8,91 @@ class DetailsPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
     return Scaffold(
-        appBar: AppBar(
-          title: const Text('Detalhes'),
+      appBar: AppBar(
+        title: const Text('Details'),
+      ),
+      body: SingleChildScrollView(
+        padding: const EdgeInsetsDirectional.symmetric(vertical: 10),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Image.network(
+              image.imageUrl,
+              width: double.infinity,
+            ),
+            Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  ListTile(
+                    title: Text(image.title),
+                    leading: const Icon(Icons.photo_camera),
+                  ),
+                  ListTile(
+                    title: Text(image.date),
+                    leading: const Icon(Icons.calendar_month),
+                  ),
+                  ListTile(
+                    title: Text(image.copyright),
+                    leading: const Icon(Icons.copyright),
+                  ),
+                  Center(
+                    child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        fixedSize: const Size.fromWidth(double.maxFinite),
+                        textStyle: const TextStyle(fontSize: 16)
+                      ),
+                      onPressed: () => showModalBottomSheet(
+                        context: context,
+                        showDragHandle: true,
+                        builder: (context) => ImageDescription(
+                          description: image.explanation,
+                        ),
+                      ),
+                      child: const Text('Show description')
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
         ),
-        body: SingleChildScrollView(
-          padding: const EdgeInsetsDirectional.symmetric(vertical: 20),
+      )
+    );
+  }
+}
+
+class ImageDescription extends StatelessWidget {
+  final String description;
+
+  const ImageDescription({
+    super.key, required this.description
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    print('>>> build() - ImageDescription');
+    return BottomSheet(
+      onClosing: () {},
+      builder: (BuildContext context) {
+        return Padding(
+          padding: const EdgeInsets.symmetric(
+            horizontal: 20.0
+          ),
           child: Column(
             children: [
-              GestureDetector(
-                onTap: () => {},
-                child: Image.network(
-                  image.imageUrl,
-                  width: double.infinity,
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsetsDirectional.all(10),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  mainAxisSize: MainAxisSize.max,
-                  children: [
-                    Text(
-                      'Title: ${image.title}',
-                      style: TextStyle(
-                        fontSize: 30,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    Text(
-                      'Date: ${image.date}',
-                      style: TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    Text(
-                      'Description: ${image.explanation}',
-                      style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.w400,
-                      ),
-                    ),
-                    Text(
-                      'Copyright: ${image.copyright.trim().replaceAll('\n', ' ')}',
-                      style: TextStyle(
-                        fontSize: 15,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ],
-                ),
+              Text(
+                description.replaceAll('\n', ''),
+                textAlign: TextAlign.justify,
               )
             ],
           ),
-        ));
+        );
+      }
+    );
   }
 }
