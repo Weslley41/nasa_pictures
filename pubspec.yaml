@@ -1,5 +1,5 @@
 name: nasa_pictures
-description: A new Flutter project.
+description: An application that displays a user-defined number of images and their information. This data is obtained from NASA's APOD API.
 publish_to: "none"
 version: 1.0.0+1
 
