@@ -23,7 +23,7 @@ class PictureProvider with ChangeNotifier {
   set countPictures(int value) {
     print('>>> update countPictures');
     _countPictures = value;
-    reloadPictures();
+    notifyListeners();
   }
 
   Future<void> loadPictures() async {
@@ -47,12 +47,12 @@ class PictureProvider with ChangeNotifier {
       if (_invalidPictures > 0) {
         await loadPictures();
       } else {
-        print('>>> notifyListeners()');
-        notifyListeners();
+        print('>>> loading completed');
       }
     } else {
       _pictures.clear();
       onerror('An error occurred while loading the images. Please try again later.');
+      return Future.error('Failed to load pictures');
     }
   }
 
@@ -76,9 +76,9 @@ class PictureProvider with ChangeNotifier {
     }
   }
 
-  Future<void> reloadPictures() {
+  void reloadPictures() {
     print('>>> reloadPictures()');
     _pictures.clear();
-    return loadPictures();
+    notifyListeners();
   }
 }

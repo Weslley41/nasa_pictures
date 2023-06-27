@@ -24,7 +24,6 @@ class _HomeState extends State<Home> {
     print('>>> initState()');
     final provider = Provider.of<PictureProvider>(context, listen: false);
     provider.onerror = showErrorMessage;
-    provider.loadPictures();
   }
 
   void showErrorMessage(String message) {
@@ -47,55 +46,63 @@ class _HomeState extends State<Home> {
     print('>>> count pictures: ${pictures.length}');
 
     return Scaffold(
-        appBar: AppBar(
-          title: const Text('NASA Pictures'),
-          actions: [
-            IconButton(
-              onPressed: () => _refreshIndicatorKey.currentState?.show(),
-              icon: const Icon(Icons.refresh),
+      appBar: AppBar(
+        title: const Text('NASA Pictures'),
+        actions: [
+          IconButton(
+            onPressed: () => provider.reloadPictures(),
+            icon: const Icon(Icons.refresh),
+          ),
+          IconButton(
+            onPressed: () => showDialog(
+              context: context,
+              builder: (BuildContext context) => SettingsDialog(provider: provider),
             ),
-            IconButton(
-              onPressed: () => showDialog(
-                context: context,
-                builder: (BuildContext context) => SettingsDialog(provider: provider),
+            icon: const Icon(Icons.settings),
+          ),
+          IconButton(
+            onPressed: () => Navigator.of(context).pushNamed(AppRoutes.aboutPage),
+            icon: const Icon(Icons.help),
+          ),
+        ],
+      ),
+      body: FutureBuilder(
+        future: provider.loadPictures(),
+        builder: (context, snapshot) {
+          print('>>> FutureBuilder()');
+          Widget child;
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            child = const Center(child: CircularProgressIndicator());
+          } else if (snapshot.hasError) {
+            child = const Center(child: Text('Failed to load pictures.', style: TextStyle(fontSize: 30)));
+          } else {
+            print('>>> count pictures: ${pictures.length}');
+            // child = const Text('Deu bom', style: TextStyle(fontSize: 30));
+            child = GridView.builder(
+              padding: const EdgeInsetsDirectional.all(20),
+              gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
+                maxCrossAxisExtent: 200,
+                childAspectRatio: 1,
+                crossAxisSpacing: 20,
+                mainAxisSpacing: 20,
               ),
-              icon: const Icon(Icons.settings),
-            ),
-            IconButton(
-              onPressed: () =>
-                  Navigator.of(context).pushNamed(AppRoutes.aboutPage),
-              icon: const Icon(Icons.help),
-            ),
-          ],
-        ),
-        body: RefreshIndicator(
-        key: _refreshIndicatorKey,
-        onRefresh: () => provider.reloadPictures(),
-        child: GridView.builder(
-            padding: const EdgeInsetsDirectional.all(20),
-            gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
-              maxCrossAxisExtent: 200,
-              childAspectRatio: 1,
-              crossAxisSpacing: 20,
-              mainAxisSpacing: 20,
-            ),
-            itemCount: pictures.length,
-            itemBuilder: (context, index) {
-              final picture = pictures[index];
-
-            return GestureDetector(
-              onTap: () => Navigator.of(context).pushNamed(
-                AppRoutes.imageDetails, arguments: picture
-              ),
-              child: ImageCard(
-                imageTitle: picture.title,
-                imageDate: picture.date,
-                imageUrl: picture.imageUrl,
-              ),
+              itemCount: pictures.length,
+              itemBuilder: (_, index) => ImageCard(picture: pictures[index]),
             );
-          },
-        ),
-      )
+          }
+
+          return RefreshIndicator(
+            key: _refreshIndicatorKey,
+            triggerMode: RefreshIndicatorTriggerMode.anywhere,
+            onRefresh: () {
+              print('>>> RefreshIndicator -> onRefresh');
+              provider.reloadPictures();
+              return Future.delayed(Duration.zero);
+            },
+            child: child,
+          );
+        }
+      ),
     );
   }
 }
