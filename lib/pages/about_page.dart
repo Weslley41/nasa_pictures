@@ -7,10 +7,8 @@ class AboutPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final Uri url = Uri.parse('https://github.com/Weslley41/nasa_pictures');
-
-    Future<void> openUrl() async {
-      if (!await launchUrl(url)) {
+    Future<void> openUrl(url) async {
+      if (!await launchUrl(Uri.parse(url))) {
         throw Exception('Não foi possível abrir o link $url');
       }
     }
@@ -19,45 +17,76 @@ class AboutPage extends StatelessWidget {
         appBar: AppBar(
           title: const Text('About'),
         ),
-        body: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
-          children: [
-            const Text(
-              '"UMA DESCRIÇÃO SIMPLES DO APP"',
-              textAlign: TextAlign.center,
-            ),
-            const Text(
-              'Developed By\n\nGabriel Benigno Rocha\nWeslley de Jesus Souza Morais',
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                fontSize: 20,
-                fontWeight: FontWeight.bold,
+        body: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 20),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              const Text(
+                "An application that displays a user-defined number of images and their information. This data is obtained from NASA's APOD API",
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.w600,
+                ),
               ),
-            ),
-            SizedBox(
-              child: Column(
-                children: [
-                  GestureDetector(
-                      onTap: () => openUrl(),
-                      child: const Icon(
-                        FontAwesomeIcons.github,
-                        size: 128,
-                      )),
-                  const SizedBox(
-                    height: 15,
-                  ),
-                  const Text(
-                    '(Click on github icon to view the project repository)',
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      fontSize: 14,
+              SizedBox(
+                child: Column(
+                  children: [
+                    GestureDetector(
+                        onTap: () =>
+                            openUrl('https://github.com/nasa/apod-api'),
+                        child: const Icon(
+                          FontAwesomeIcons.userAstronaut,
+                          size: 100,
+                        )),
+                    const SizedBox(
+                      height: 15,
                     ),
-                  ),
-                ],
+                    const Text(
+                      '(Click on astronaut icon to view the API repository)',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        fontSize: 14,
+                      ),
+                    ),
+                  ],
+                ),
               ),
-            )
-          ],
+              const Text(
+                'APP Developed By\n\nGabriel Benigno Rocha\nWeslley de Jesus Souza Morais',
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              SizedBox(
+                child: Column(
+                  children: [
+                    GestureDetector(
+                        onTap: () => openUrl(
+                            'https://github.com/Weslley41/nasa_pictures'),
+                        child: const Icon(
+                          FontAwesomeIcons.github,
+                          size: 100,
+                        )),
+                    const SizedBox(
+                      height: 15,
+                    ),
+                    const Text(
+                      '(Click on github icon to view the project repository)',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        fontSize: 14,
+                      ),
+                    ),
+                  ],
+                ),
+              )
+            ],
+          ),
         ));
   }
 }
