@@ -5,6 +5,7 @@ import 'package:provider/provider.dart';
 
 import '../models/apod_picture.dart';
 import '../providers/picture_provider.dart';
+import './settings_page.dart';
 
 class Home extends StatefulWidget {
   const Home({super.key});
@@ -54,8 +55,10 @@ class _HomeState extends State<Home> {
               icon: const Icon(Icons.refresh),
             ),
             IconButton(
-              onPressed: () =>
-                  Navigator.of(context).pushNamed(AppRoutes.settingsPage),
+              onPressed: () => showDialog(
+                context: context,
+                builder: (BuildContext context) => SettingsDialog(provider: provider),
+              ),
               icon: const Icon(Icons.settings),
             ),
             IconButton(

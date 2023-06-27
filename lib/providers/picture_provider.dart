@@ -17,7 +17,14 @@ class PictureProvider with ChangeNotifier {
   int _invalidPictures = 0;
 
   List<APODPicture> get pictures => _pictures;
+  int get countPictures => _countPictures;
   APODPicture getPicture(int index) => _pictures[index];
+
+  set countPictures(int value) {
+    print('>>> update countPictures');
+    _countPictures = value;
+    reloadPictures();
+  }
 
   Future<void> loadPictures() async {
     final int count = _invalidPictures == 0 ? _countPictures : _invalidPictures;
@@ -73,11 +80,5 @@ class PictureProvider with ChangeNotifier {
     print('>>> reloadPictures()');
     _pictures.clear();
     return loadPictures();
-  }
-
-  void updateCountImages(int count) {
-    print('>>> updateCountImages()');
-    _countPictures = count;
-    reloadPictures();
   }
 }

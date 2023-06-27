@@ -6,7 +6,6 @@ import 'package:nasa_pictures/pages/details_page.dart';
 import 'package:provider/provider.dart';
 
 import '../pages/home.dart';
-import '../pages/settings_page.dart';
 import '../providers/picture_provider.dart';
 
 class NasaPictures extends StatelessWidget {
@@ -17,23 +16,22 @@ class NasaPictures extends StatelessWidget {
     return ChangeNotifierProvider(
       create: (_) => PictureProvider(),
       child: MaterialApp(
-          debugShowCheckedModeBanner: false,
-          title: 'NASA Pictures',
-          theme: ThemeData(
-            colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-            useMaterial3: true,
-          ),
-          initialRoute: AppRoutes.root,
-          routes: {
-            AppRoutes.root: (context) => const Home(),
-            AppRoutes.imageDetails: (context) {
-              final image =
-                  ModalRoute.of(context)?.settings.arguments as APODPicture;
-              return DetailsPage(image: image);
-            },
-            AppRoutes.aboutPage: (context) => const AboutPage(),
-            AppRoutes.settingsPage: (context) => const SettingsPage(),
-          }),
+        debugShowCheckedModeBanner: false,
+        title: 'NASA Pictures',
+        theme: ThemeData(
+          colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+          useMaterial3: true,
+        ),
+        initialRoute: AppRoutes.root,
+        routes: {
+          AppRoutes.root: (context) => const Home(),
+          AppRoutes.imageDetails: (context) {
+            final image = ModalRoute.of(context)?.settings.arguments as APODPicture;
+            return DetailsPage(image: image);
+          },
+          AppRoutes.aboutPage: (context) => const AboutPage(),
+        }
+      ),
     );
   }
 }
