@@ -25,8 +25,6 @@ class DetailsPage extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.all(16.0),
               child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   ListTile(
                     title: Text(image.title),
@@ -49,6 +47,7 @@ class DetailsPage extends StatelessWidget {
                       onPressed: () => showModalBottomSheet(
                         context: context,
                         showDragHandle: true,
+                        isScrollControlled: true,
                         builder: (context) => ImageDescription(
                           description: image.explanation,
                         ),
@@ -76,14 +75,19 @@ class ImageDescription extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     print('>>> build() - ImageDescription');
-    return BottomSheet(
-      onClosing: () {},
-      builder: (BuildContext context) {
+    return DraggableScrollableSheet(
+      expand: false,
+      snap: true,
+      initialChildSize: 0.5,
+      minChildSize: 0.5,
+      maxChildSize: 0.8,
+      builder: (context, controller) {
         return Padding(
-          padding: const EdgeInsets.symmetric(
-            horizontal: 20.0
+          padding: const EdgeInsets.only(
+            left: 20.0, right: 20.0, bottom: 10.0
           ),
-          child: Column(
+          child: ListView(
+            controller: controller,
             children: [
               Text(
                 description.replaceAll('\n', ''),
