@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-
+import 'package:nasa_pictures/providers/design_provider.dart';
+import 'package:provider/provider.dart';
 import '../providers/picture_provider.dart';
 
 class SettingsDialog extends StatefulWidget {
@@ -13,8 +14,21 @@ class SettingsDialog extends StatefulWidget {
 class _SettingsDialogState extends State<SettingsDialog> {
   late double _currentCountImages = widget.provider.countPictures.toDouble();
 
+  final MaterialStateProperty<Icon?> thumbIcon =
+      MaterialStateProperty.resolveWith<Icon?>(
+    (Set<MaterialState> states) {
+      if (states.contains(MaterialState.selected)) {
+        return const Icon(Icons.dark_mode);
+      }
+      return const Icon(Icons.light_mode);
+    },
+  );
+
   @override
   Widget build(BuildContext context) {
+    final DesignProvider themeProvider =
+        Provider.of<DesignProvider>(context, listen: false);
+
     return AlertDialog(
       title: const Row(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -30,9 +44,9 @@ class _SettingsDialogState extends State<SettingsDialog> {
       content: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          const Text(
+          Text(
             'Select the number of images to display',
-            style: TextStyle(fontSize: 14),
+            style: Theme.of(context).textTheme.labelLarge,
           ),
           const SizedBox(height: 20),
           Slider(
@@ -49,6 +63,20 @@ class _SettingsDialogState extends State<SettingsDialog> {
               // currentCountImages = value;
             },
           ),
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              Text(
+                'Dark Mode:',
+                style: Theme.of(context).textTheme.labelLarge,
+              ),
+              Switch(
+                  thumbIcon: thumbIcon,
+                  value: themeProvider.isDark,
+                  onChanged: (value) => themeProvider.changeThemeMode(value)),
+            ],
+          )
         ],
       ),
       actions: [
