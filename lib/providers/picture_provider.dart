@@ -21,7 +21,7 @@ class PictureProvider with ChangeNotifier {
   set countPictures(int value) {
     print('>>> update countPictures');
     _countPictures = value;
-    notifyListeners();
+    reloadPictures();
   }
 
   Future<void> loadPictures() async {
