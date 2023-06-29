@@ -1,19 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 
 class DesignProvider with ChangeNotifier {
-  ThemeMode _theme = ThemeMode.light;
-  bool _isdark = false;
+  late bool _isDark;
 
-  bool get isDark => _isdark;
-  ThemeMode get themeMode => _theme;
+  DesignProvider() {
+    final Brightness brightness = SchedulerBinding.instance.platformDispatcher.platformBrightness;
+    _isDark = brightness == Brightness.dark;
+  }
 
-  dynamic changeThemeMode(newValue) {
-    _isdark = newValue;
-    if (_theme == ThemeMode.light) {
-      _theme = ThemeMode.dark;
-    } else {
-      _theme = ThemeMode.light;
-    }
+  bool get isDark => _isDark;
+  ThemeMode get themeMode => _isDark ? ThemeMode.dark : ThemeMode.light;
+
+  dynamic changeThemeMode() {
+    _isDark = !_isDark;
     notifyListeners();
   }
 }

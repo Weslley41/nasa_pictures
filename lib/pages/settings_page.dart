@@ -26,8 +26,7 @@ class _SettingsDialogState extends State<SettingsDialog> {
 
   @override
   Widget build(BuildContext context) {
-    final DesignProvider themeProvider =
-        Provider.of<DesignProvider>(context, listen: false);
+    final DesignProvider themeProvider = Provider.of<DesignProvider>(context, listen: false);
 
     return AlertDialog(
       title: const Row(
@@ -72,9 +71,10 @@ class _SettingsDialogState extends State<SettingsDialog> {
                 style: Theme.of(context).textTheme.labelLarge,
               ),
               Switch(
-                  thumbIcon: thumbIcon,
-                  value: themeProvider.isDark,
-                  onChanged: (value) => themeProvider.changeThemeMode(value)),
+                thumbIcon: thumbIcon,
+                value: themeProvider.isDark,
+                onChanged: (value) => themeProvider.changeThemeMode()
+              ),
             ],
           )
         ],

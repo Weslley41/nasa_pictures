@@ -23,35 +23,35 @@ class NasaPicturesState extends State<NasaPictures> {
   @override
   Widget build(BuildContext context) {
     return MultiProvider(
-        providers: [
-          ChangeNotifierProvider(
-            create: (_) => PictureProvider(),
-          ),
-          ChangeNotifierProvider(
-            create: (_) => DesignProvider(),
-          )
-        ],
-        builder: (context, child) => MaterialApp(
-                debugShowCheckedModeBanner: false,
-                title: 'NASA Pictures',
-                theme: ThemeData(
-                  colorScheme:
-                      ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-                  useMaterial3: true,
-                ),
-                themeMode: Provider.of<DesignProvider>(context).themeMode,
-                darkTheme: ThemeData.dark(
-                  useMaterial3: true,
-                ),
-                initialRoute: AppRoutes.root,
-                routes: {
-                  AppRoutes.root: (context) => const Home(),
-                  AppRoutes.imageDetails: (context) {
-                    final image = ModalRoute.of(context)?.settings.arguments
-                        as APODPicture;
-                    return DetailsPage(image: image);
-                  },
-                  AppRoutes.aboutPage: (context) => const AboutPage(),
-                }));
+      providers: [
+        ChangeNotifierProvider(
+          create: (_) => PictureProvider(),
+        ),
+        ChangeNotifierProvider(
+          create: (_) => DesignProvider(),
+        )
+      ],
+      builder: (context, child) => MaterialApp(
+        debugShowCheckedModeBanner: false,
+        title: 'NASA Pictures',
+        theme: ThemeData(
+          colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue),
+          useMaterial3: true,
+        ),
+        darkTheme: ThemeData.dark(
+          useMaterial3: true,
+        ),
+        themeMode: Provider.of<DesignProvider>(context).themeMode,
+        initialRoute: AppRoutes.root,
+        routes: {
+          AppRoutes.root: (context) => const Home(),
+          AppRoutes.imageDetails: (context) {
+            final image = ModalRoute.of(context)?.settings.arguments as APODPicture;
+            return DetailsPage(image: image);
+          },
+          AppRoutes.aboutPage: (context) => const AboutPage(),
+        }
+      )
+    );
   }
 }
