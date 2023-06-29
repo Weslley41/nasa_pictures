@@ -16,7 +16,7 @@ class ErrorPage extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Image.asset(
-            'assets/images/$randomNumber.jpg',
+            'assets/images/$randomNumber.png',
             height: 250,
           ),
           const SizedBox(height: 20),
