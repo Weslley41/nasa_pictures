@@ -6,6 +6,7 @@ import 'package:nasa_pictures/pages/details_page.dart';
 import 'package:nasa_pictures/providers/design_provider.dart';
 import 'package:provider/provider.dart';
 
+import '../theme.dart';
 import '../pages/home.dart';
 import '../providers/picture_provider.dart';
 
@@ -34,13 +35,8 @@ class NasaPicturesState extends State<NasaPictures> {
       builder: (context, child) => MaterialApp(
         debugShowCheckedModeBanner: false,
         title: 'NASA Pictures',
-        theme: ThemeData(
-          colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue),
-          useMaterial3: true,
-        ),
-        darkTheme: ThemeData.dark(
-          useMaterial3: true,
-        ),
+        theme: lightTheme,
+        darkTheme: darkTheme,
         themeMode: Provider.of<DesignProvider>(context).themeMode,
         initialRoute: AppRoutes.root,
         routes: {
