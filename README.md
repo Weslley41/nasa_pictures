@@ -1,24 +1,33 @@
-# NASA Pictures
+# NASA Pictures - 2nd test of the discipline "Programação 4" at UESPI
+[Download APK here](https://github.com/Weslley41/nasa_pictures/releases/download/v1/nasa_pictures.apk)
 
-A new Flutter project.
+## Task
+Develop a mobile application in Flutter that implements a gallery of space pictures powered by NASA's APOD (Astronomy Picture of the Day) API.
 
-## Getting Started
+## Students:
+- Gabriel Benigno Rocha 
+- Weslley de Jesus Souza Morais
 
-Create a file `.env` and add your [NASA API KEY](https://api.nasa.gov/#signUp)
-
-Example:
-
+## Instructions
 ```
-API_KEY='INSERT YOUR NASA API KEY HERE'
+# Installing dependencies
+flutter pub get
+
+# Running the app
+flutter run
 ```
 
-This project is a starting point for a Flutter application.
+## Technologies used
+<div style="display: inline_block">
+    <img align="center" alt="Dart" height="30" width="40" src="https://raw.githubusercontent.com/devicons/devicon/master/icons/dart/dart-original.svg">
+    <img align="center" alt="Flutter" height="30" width="40" src="https://raw.githubusercontent.com/devicons/devicon/master/icons/flutter/flutter-original.svg">
+</div>
 
-A few resources to get you started if this is your first Flutter project:
+## Assets images from
+[@storyset on freepik](https://www.freepik.com/author/stories)
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+## Screenshots
+<div style="display: flex; justify-content: space-around;">
+    <img src="screenshots/dark_mode/dark_mode.gif" width="45%">
+    <img src="screenshots/light_mode/light_mode.gif" width="45%">
+</div>
