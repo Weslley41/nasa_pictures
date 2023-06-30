@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:nasa_pictures/providers/design_provider.dart';
 import 'package:provider/provider.dart';
+
+import '../providers/design_provider.dart';
 import '../providers/picture_provider.dart';
 
 class SettingsDialog extends StatefulWidget {
@@ -15,8 +16,7 @@ class _SettingsDialogState extends State<SettingsDialog> {
   late double _currentCountImages = widget.provider.countPictures.toDouble();
 
   final MaterialStateProperty<Icon?> thumbIcon =
-      MaterialStateProperty.resolveWith<Icon?>(
-    (Set<MaterialState> states) {
+    MaterialStateProperty.resolveWith<Icon?>((Set<MaterialState> states) {
       if (states.contains(MaterialState.selected)) {
         return const Icon(Icons.dark_mode);
       }
@@ -54,13 +54,9 @@ class _SettingsDialogState extends State<SettingsDialog> {
             max: 20,
             divisions: 3,
             label: _currentCountImages.round().toString(),
-            onChanged: (double value) {
-              setState(() {
-                print('>>> setState: $_currentCountImages to $value');
-                _currentCountImages = value;
-              });
-              // currentCountImages = value;
-            },
+            onChanged: (double value) => setState(() {
+              _currentCountImages = value;
+            })
           ),
           Row(
             crossAxisAlignment: CrossAxisAlignment.center,
@@ -81,16 +77,12 @@ class _SettingsDialogState extends State<SettingsDialog> {
       ),
       actions: [
         TextButton(
-          onPressed: () {
-            Navigator.pop(context);
-            print('>>> Close without saving');
-          },
+          onPressed: () => Navigator.pop(context),
           child: const Text('Close'),
         ),
         TextButton(
           onPressed: () {
             Navigator.pop(context);
-            print('>>> updateCount($_currentCountImages)');
             widget.provider.countPictures = _currentCountImages.round();
           },
           child: const Text('Save'),

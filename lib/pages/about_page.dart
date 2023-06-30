@@ -26,7 +26,7 @@ class AboutPage extends StatelessWidget {
               ),
               const SizedBox(height: 10),
               Text(
-                'An application that displays a user-defined number of images and their information. This data is obtained from NASA\'s APOD API',
+                'An application that displays a user-defined number of images and their information. This data is obtained from NASA\'s APOD API.',
                 textAlign: TextAlign.center,
                 style: Theme.of(context).textTheme.bodyLarge,
               ),

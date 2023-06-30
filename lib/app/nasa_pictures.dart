@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:nasa_pictures/app/app_routes.dart';
-import 'package:nasa_pictures/models/apod_picture.dart';
-import 'package:nasa_pictures/pages/about_page.dart';
-import 'package:nasa_pictures/pages/details_page.dart';
-import 'package:nasa_pictures/providers/design_provider.dart';
 import 'package:provider/provider.dart';
 
-import '../theme.dart';
+import '../app/app_routes.dart';
+import '../models/apod_picture.dart';
+import '../pages/about_page.dart';
+import '../pages/details_page.dart';
 import '../pages/home.dart';
+import '../providers/design_provider.dart';
 import '../providers/picture_provider.dart';
+import '../theme.dart';
 
 class NasaPictures extends StatefulWidget {
   const NasaPictures({super.key});
@@ -16,8 +16,9 @@ class NasaPictures extends StatefulWidget {
   @override
   State<NasaPictures> createState() => NasaPicturesState();
 
-  static NasaPicturesState? of(BuildContext context) =>
-      context.findAncestorStateOfType<NasaPicturesState>();
+  static NasaPicturesState? of(BuildContext context) {
+    return context.findAncestorStateOfType<NasaPicturesState>();
+  }
 }
 
 class NasaPicturesState extends State<NasaPictures> {

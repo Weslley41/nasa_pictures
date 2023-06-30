@@ -19,7 +19,6 @@ class PictureProvider with ChangeNotifier {
   APODPicture getPicture(int index) => _pictures[index];
 
   set countPictures(int value) {
-    print('>>> update countPictures');
     _countPictures = value;
     reloadPictures();
   }
@@ -27,14 +26,10 @@ class PictureProvider with ChangeNotifier {
   Future<void> loadPictures() async {
     final int count = _invalidPictures == 0 ? _countPictures : _invalidPictures;
     _invalidPictures = 0;
-    print('>>> loadPictures($count)');
     final String url = '$baseUrl?api_key=$apiKey&count=$count';
     final request = await http.get(Uri.parse(url)).timeout(
       const Duration(seconds: 10),
-      onTimeout: () {
-        print('>>> loadPictures() - Timeout');
-        return http.Response('Error timeout', 408);
-      }
+      onTimeout: () => http.Response('Error timeout', 408)
     );
 
     if (request.statusCode == HttpStatus.ok) {
@@ -43,8 +38,6 @@ class PictureProvider with ChangeNotifier {
 
       if (_invalidPictures > 0) {
         await loadPictures();
-      } else {
-        print('>>> loading completed');
       }
     } else {
       _pictures.clear();
@@ -53,7 +46,6 @@ class PictureProvider with ChangeNotifier {
   }
 
   void loadValidPicture(Map<String, dynamic> picture) {
-    print('>>> pictureValid()');
     APODPicture apodPicture;
     try {
       apodPicture = APODPicture(
@@ -67,13 +59,11 @@ class PictureProvider with ChangeNotifier {
 
       _pictures.add(apodPicture);
     } catch (e) {
-      print('>>> Picture Invalid');
       _invalidPictures++;
     }
   }
 
   void reloadPictures() {
-    print('>>> reloadPictures()');
     _pictures.clear();
     notifyListeners();
   }

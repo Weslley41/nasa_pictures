@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:nasa_pictures/models/apod_picture.dart';
+
+import '../models/apod_picture.dart';
 
 class DetailsPage extends StatelessWidget {
   final APODPicture image;
@@ -74,7 +75,6 @@ class ImageDescription extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print('>>> build() - ImageDescription');
     return DraggableScrollableSheet(
       expand: false,
       snap: true,

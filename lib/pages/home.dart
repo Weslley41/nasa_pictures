@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:nasa_pictures/app/app_routes.dart';
-import 'package:nasa_pictures/widgets/image_card.dart';
 import 'package:provider/provider.dart';
 
+import '../app/app_routes.dart';
 import '../models/apod_picture.dart';
 import '../pages/error.dart';
 import '../pages/loading.dart';
 import '../providers/picture_provider.dart';
-import './settings_page.dart';
+import '../widgets/image_card.dart';
+import '../widgets/settings_dialog.dart';
 
 class Home extends StatefulWidget {
   const Home({super.key});
@@ -21,10 +21,8 @@ class _HomeState extends State<Home> {
 
   @override
   Widget build(BuildContext context) {
-    print('>>> build()');
     final provider = Provider.of<PictureProvider>(context, listen: true);
     final List<APODPicture> pictures = provider.pictures;
-    print('>>> count pictures: ${pictures.length}');
 
     return Scaffold(
       appBar: AppBar(
@@ -50,14 +48,12 @@ class _HomeState extends State<Home> {
       body: FutureBuilder(
         future: provider.loadPictures(),
         builder: (context, snapshot) {
-          print('>>> FutureBuilder()');
           Widget child;
           if (snapshot.connectionState == ConnectionState.waiting) {
             child = const LoadingPage();
           } else if (snapshot.hasError) {
             child = ErrorPage(onTryAgain: provider.reloadPictures);
           } else {
-            print('>>> count pictures: ${pictures.length}');
             child = GridView.builder(
               padding: const EdgeInsetsDirectional.all(20),
               gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
@@ -74,7 +70,6 @@ class _HomeState extends State<Home> {
           return RefreshIndicator(
             key: _refreshIndicatorKey,
             onRefresh: () {
-              print('>>> RefreshIndicator -> onRefresh');
               provider.reloadPictures();
               return Future.delayed(Duration.zero);
             },
