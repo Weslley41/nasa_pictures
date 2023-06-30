@@ -8,32 +8,34 @@ class ErrorPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final randomNumber = Random().nextInt(10) + 1;
-    return Container(
-      width: double.infinity,
-      padding: const EdgeInsets.all(20),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          Image.asset(
-            'assets/images/$randomNumber.png',
-            height: 250,
-          ),
-          const SizedBox(height: 20),
-          Text(
-            'Something went wrong. Please try again.',
-            style: Theme.of(context).textTheme.bodyLarge,
-          ),
-          const SizedBox(height: 20),
-          ElevatedButton(
-            style: ElevatedButton.styleFrom(
-              fixedSize: const Size.fromWidth(double.maxFinite),
-              textStyle: Theme.of(context).textTheme.bodyLarge,
+    return SingleChildScrollView(
+      child: Container(
+        width: double.infinity,
+        padding: const EdgeInsets.all(20),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Image.asset(
+              'assets/images/$randomNumber.png',
+              height: 250,
             ),
-            onPressed: onTryAgain,
-            child: const Text('Try again')
-          )
-        ],
+            const SizedBox(height: 20),
+            Text(
+              'Something went wrong. Please try again.',
+              style: Theme.of(context).textTheme.bodyLarge,
+            ),
+            const SizedBox(height: 20),
+            ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                fixedSize: const Size.fromWidth(double.maxFinite),
+                textStyle: Theme.of(context).textTheme.bodyLarge,
+              ),
+              onPressed: onTryAgain,
+              child: const Text('Try again')
+            )
+          ],
+        ),
       ),
     );
   }
